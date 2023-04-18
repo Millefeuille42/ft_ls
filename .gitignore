@@ -1,5 +1,10 @@
 *.o
+*.d
 *.out
+ft_ls
+
+.deps
+.objs
 
 .idea
 cmake-build-debug
