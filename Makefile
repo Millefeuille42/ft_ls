@@ -2,11 +2,44 @@
 
 ######### Sources #########
 
-SOURCES	= cmd/main.c
+SOURCES	= 		cmd/main.c \
+           \
+          		pkg/ft_print/ft_putstr.c \
+          		pkg/ft_print/ft_putchar.c \
+          		pkg/ft_print/ft_putnbr.c \
+           \
+          		pkg/ft_string/ft_strlen.c \
+          		pkg/ft_string/string.c \
+          		pkg/ft_string/ft_string_concat.c \
+          		pkg/ft_string/ft_string_copy.c \
+          		pkg/ft_string/ft_split.c \
+           \
+          		pkg/ft_memory/safe_free.c \
+          		pkg/ft_memory/ft_bzero.c \
+          		pkg/ft_memory/zeroed_malloc.c \
+          		pkg/ft_memory/del_array.c \
+           \
+          		pkg/ft_error/panic.c \
+          		pkg/ft_error/log_error.c \
+           \
+          		pkg/ft_list/ft_list.c \
+          		pkg/ft_list/iter_list.c \
+          		pkg/ft_list/delete_list.c \
+          		pkg/ft_list/list_accessors.c \
+          		pkg/ft_list/list_accessors.c \
 
-HEADERS	=				# HEADER FILES HERE
 
-HEADERS_DIRECTORIES	=	# HEADERS DIRECTORIES, DON'T FORGET THE TRAILING /
+HEADERS	=		pkg/ft_print/ft_print.h \
+          		pkg/ft_string/ft_string.h \
+          		pkg/ft_error/ft_error.h \
+          		pkg/ft_list/ft_list.h \
+          		pkg/ft_memory/ft_memory.h
+
+HEADERS_DIRECTORIES	=			pkg/ft_print/ \
+                                pkg/ft_string/ \
+                                pkg/ft_error/ \
+                                pkg/ft_list/ \
+                                pkg/ft_memory/
 
 ######### Details #########
 
@@ -77,8 +110,8 @@ $(DEPS_DIR):
 					@mkdir -p $(DEPS_DIR)
 
 $(OBJS_DIR)%.o:	%.$(SOURCES_EXTENSION)
-			@mkdir -p $(OBJS_DIR)$(dir $(SOURCES))
-			@mkdir -p $(DEPS_DIR)$(dir $(SOURCES))
+			mkdir -p $(OBJS_DIR)$(dir $<)
+			@mkdir -p $(DEPS_DIR)$(dir $<)
 			$(COMPILE) $(FLAGS) -MMD -MP -MF $(DEPS_DIR)$*.d -c $< -o $@
 
 .PHONY	:	all clean fclean re help
