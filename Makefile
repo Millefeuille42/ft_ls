@@ -1,5 +1,3 @@
-.DEFAULT_GOAL := help
-
 ######### Sources #########
 
 SOURCES	= 		cmd/main.c \
@@ -30,15 +28,24 @@ SOURCES	= 		cmd/main.c \
           		pkg/ft_list/list_accessors.c \
           		pkg/ft_list/list_accessors.c \
           		pkg/ft_list/list_sort.c \
+          \
+          		cmd/prints.c \
+                cmd/parsing.c \
+                cmd/sorts.c \
+                cmd/utils.c \
+                cmd/fs_helpers.c
 
 
-HEADERS	=		pkg/ft_print/ft_print.h \
+HEADERS	=		cmd/ft_ls.h \
+			\
+				pkg/ft_print/ft_print.h \
           		pkg/ft_string/ft_string.h \
           		pkg/ft_error/ft_error.h \
           		pkg/ft_list/ft_list.h \
           		pkg/ft_memory/ft_memory.h
 
-HEADERS_DIRECTORIES	=			pkg/ft_print/ \
+HEADERS_DIRECTORIES	=			cmd \
+								pkg/ft_print/ \
                                 pkg/ft_string/ \
                                 pkg/ft_error/ \
                                 pkg/ft_list/ \
@@ -54,7 +61,7 @@ SOURCES_EXTENSION = c
 COMPILE		=	clang
 DELETE		=	rm -f
 
-FLAGS		=	-Wall -Werror -Wextra -pedantic
+FLAGS		=	-Wall -Werror -Wextra -pedantic -O3
 
 ######### Additional Paths #########
 
@@ -95,13 +102,13 @@ help: ## Print this help
 
 #########  Sub Rules  #########
 
-objs	:	$(OBJS_DIR) $(DEPS_DIR) $(OBJS)
+objs: $(OBJS_DIR) $(DEPS_DIR) $(OBJS) ## Compile object files
 
-clean_deps:
+clean_deps: ## Delete dependency files and directory
 			$(DELETE) -r $(DEPS_DIR)
-clean_objs:
+clean_objs: ## Delete object files and directory
 			$(DELETE) -r $(OBJS_DIR)
-clean_bin:
+clean_bin: ## Delete produced binary
 			$(DELETE) $(NAME)
 
 #########  Implicit Rules  #########
