@@ -77,7 +77,11 @@ char file_name_alpha_asc_sort(void *a, void *b) {
 	file_data *b_file = b;
 	for (size_t i = 0; a_file->path[i]; i++) {
 		char a_char = (char) ft_tolower(a_file->path[i]);
+		for (size_t i2 = i; a_char == '.'; i2++)
+			a_char = a_file->path[i2];
 		char b_char = (char) ft_tolower(b_file->path[i]);
+		for (size_t i2 = i; b_char == '.'; i2++)
+			b_char = b_file->path[i2];
 		if (a_char != b_char)
 			return (char) (a_char < b_char);
 	}
@@ -158,7 +162,7 @@ char iter_dir(char flags, char *path, DIR *dir, dir_func f) {
 		ft_putchar('\n');
 	}
 
-	file_list = list_sort(file_list, file_name_alpha_asc_sort);
+	file_list = list_sort(file_list, file_name_alpha_asc_sort, LS_HAS_FLAG_r(flags));
 
 	char err = 0;
 	ft_list *current = file_list;
@@ -429,4 +433,5 @@ int main(int argc, char *argv[]) {
 }
 
 // TODO Cleanup
-// TODO Rrt flags
+// TODO Rt flags
+// TODO Unknown dir error management
