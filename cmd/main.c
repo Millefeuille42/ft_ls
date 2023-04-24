@@ -66,12 +66,6 @@ void del_file_data(void **ptr) {
 	safe_free(ptr);
 }
 
-char *get_path(char *s) {
-	if (s)
-		return ft_string(s);
-	return ft_string(".");
-}
-
 char file_name_alpha_sort(void *a, void *b) {
 	file_data *a_file = a;
 	file_data *b_file = b;
@@ -95,8 +89,17 @@ char file_ctime_desc_sort(void *a, void *b) {
 	return (char) (b_file->file_stat.st_ctim.tv_sec < a_file->file_stat.st_ctim.tv_sec);
 }
 
+int has_trailing_slash(char *path) {
+	size_t len = ft_strlen(path);
+	return len && path[len - 1] == '/';
+}
+
 file_data *get_data_from_file(struct dirent *file_info, char *path) {
-	char *filepath = ft_string_concat((char *[3]){path, "/", file_info->d_name}, 3);
+	char *filepath = NULL;
+	if (has_trailing_slash(path))
+		filepath = ft_string_concat((char *[2]){path, file_info->d_name}, 2);
+	else
+		filepath = ft_string_concat((char *[3]){path, "/", file_info->d_name}, 3);
 	if (!filepath)
 		return NULL;
 	struct stat file_stat;
@@ -169,7 +172,6 @@ char iter_dir(char flags, char *path, DIR *dir, dir_func f) {
 		ft_putchar('\n');
 	}
 
-
 	if (LS_HAS_FLAG_t(flags))
 		file_list = list_sort(file_list, file_ctime_desc_sort, LS_HAS_FLAG_r(flags));
 	else
@@ -181,11 +183,6 @@ char iter_dir(char flags, char *path, DIR *dir, dir_func f) {
 
 	delete_list_forward(&file_list, del_file_data);
 	return err;
-}
-
-void walk_dir(DIR *dir, dir_func f) {
-	(void) dir;
-	(void) f;
 }
 
 char print_file_permissions(file_data *file) {
@@ -339,6 +336,60 @@ char print_dir_props_no_xattr(char flags, ft_list *file_ptr) {
 	return 0;
 }
 
+int is_cur_dir_or_prev_dir(char *dir_name) {
+	size_t len = ft_strlen(dir_name);
+	return dir_name && dir_name[0] == '.' && (len == 1 || (len == 2 && dir_name[1] == '.'));
+}
+
+ft_list *get_dirs_of_dir(char *path) {
+	DIR *dir = opendir(path);
+	if (!dir)
+		return NULL;
+
+	struct dirent *file_info = readdir(dir);
+	ft_list *dir_list = NULL;
+	for (; file_info; file_info = readdir(dir)) {
+		if (is_cur_dir_or_prev_dir(file_info->d_name))
+			continue;
+		char *filepath = NULL;
+		if (has_trailing_slash(path))
+			filepath = ft_string_concat((char *[2]){path, file_info->d_name}, 2);
+		else
+			filepath = ft_string_concat((char *[3]){path, "/", file_info->d_name}, 3);
+		if (!filepath) {
+			delete_list_forward(&dir_list, safe_free);
+			closedir(dir);
+			return NULL;
+		}
+
+		struct stat file_stat;
+		if (lstat(filepath, &file_stat) < 0) {
+			closedir(dir);
+			safe_free((void **) &filepath);
+			delete_list_forward(&dir_list, safe_free);
+			return NULL;
+		}
+
+		if (!S_ISDIR(file_stat.st_mode))
+			continue;
+
+		ft_list *cur_dir = new_element_to_list(dir_list, filepath);
+		if (!cur_dir) {
+			safe_free((void **) &filepath);
+			delete_list_forward(&dir_list, safe_free);
+			closedir(dir);
+			return NULL;
+		}
+		if (!dir_list)
+			dir_list = cur_dir;
+
+		ft_list *list_of_dir = get_dirs_of_dir(filepath);
+		end_of_list(dir_list)->next = list_of_dir;
+	}
+	closedir(dir);
+	return dir_list;
+}
+
 int start_dir_iter(char *path, char flags) {
 	DIR *dir = opendir(path);
 	if (!dir)
@@ -346,6 +397,26 @@ int start_dir_iter(char *path, char flags) {
 	if (iter_dir(flags, path, dir, print_dir_props_no_xattr)) {
 		closedir(dir);
 		return -1;
+	}
+
+	if (LS_HAS_FLAG_R(flags)) {
+		ft_list *current = get_dirs_of_dir(path);
+		if (current) {
+			ft_putchar('\n');
+			if (!LS_HAS_FLAG_l(flags))
+				ft_putchar('\n');
+		}
+		for (; current; current = current->next) {
+			if (start_dir_iter(current->data, flags)) {
+				closedir(dir);
+				return -1;
+			}
+			if (current->next) {
+				ft_putchar('\n');
+				if (!LS_HAS_FLAG_l(flags))
+					ft_putchar('\n');
+			}
+		}
 	}
 	closedir(dir);
 	return 0;
@@ -365,6 +436,7 @@ char parse_flags(char flags, char *str) {
 				break;
 			case 'R':
 				LS_SET_FLAG_R(flags);
+				LS_SET_FLAG_dirs(flags);
 				break;
 			case 't':
 				LS_SET_FLAG_t(flags);
@@ -436,12 +508,13 @@ int main(int argc, char *argv[]) {
 		}
 		if (current->next)
 			ft_putchar('\n');
-		ft_putchar('\n');
+		if (!LS_HAS_FLAG_l(args.flags))
+			ft_putchar('\n');
 	}
 	delete_list_forward(&args.directories, safe_free);
 	return 0;
 }
 
 // TODO Cleanup
-// TODO R flags
 // TODO Unknown dir error management
+// TODO File as path error management
