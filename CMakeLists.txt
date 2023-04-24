@@ -32,7 +32,7 @@ set(SOURCE_FT_LS
 		pkg/ft_list/list_accessors.c
 		pkg/ft_list/ft_list.h
 		pkg/ft_string/ft_string_copy.c
-		pkg/ft_print/ft_putnbr.c pkg/ft_string/ft_split.c pkg/ft_memory/del_array.c)
+		pkg/ft_print/ft_putnbr.c pkg/ft_string/ft_split.c pkg/ft_memory/del_array.c pkg/ft_string/get_after_n_sep.c)
 
 add_executable(ft_ls ${SOURCE_FT_LS})
 target_link_libraries(ft_ls LINK_PUBLIC)

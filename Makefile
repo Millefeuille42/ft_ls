@@ -13,6 +13,7 @@ SOURCES	= 		cmd/main.c \
           		pkg/ft_string/ft_string_concat.c \
           		pkg/ft_string/ft_string_copy.c \
           		pkg/ft_string/ft_split.c \
+          		pkg/ft_string/get_after_n_sep.c \
            \
           		pkg/ft_memory/safe_free.c \
           		pkg/ft_memory/ft_bzero.c \

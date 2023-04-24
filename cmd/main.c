@@ -387,7 +387,7 @@ char print_file_size(file_data *file) {
 }
 
 char print_file_name(file_data *file) {
-	ft_putstr(file->path);
+	ft_putstr(get_after_last_sep(file->path, '/'));
 	return 0;
 }
 
@@ -527,6 +527,5 @@ int main(int argc, char *argv[]) {
 
 // TODO Cleanup
 // TODO Sort output
-// TODO Do not print fullpath when printing filename
 // TODO multi directory display
 // TODO Rrt flags
