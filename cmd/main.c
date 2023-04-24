@@ -12,12 +12,19 @@
 #include "../pkg/ft_list/ft_list.h"
 #include "../pkg/ft_string/ft_string.h"
 
-#define LS_FLAG_l 1  // 000001
-#define LS_FLAG_a 2  // 000010
-#define LS_FLAG_r 4  // 000100
-#define LS_FLAG_R 8  // 001000
-#define LS_FLAG_t 16 // 010000
-#define LS_FLAG_dirs // 100000 Should have multi directory display ?
+#define LS_FLAG_l 1  	// 000001
+#define LS_FLAG_a 2  	// 000010
+#define LS_FLAG_r 4  	// 000100
+#define LS_FLAG_R 8  	// 001000
+#define LS_FLAG_t 16 	// 010000
+#define LS_FLAG_dirs 32 // 100000 Should have multi directory display ?
+
+#define LS_SET_FLAG_l(flags) (flags |= LS_FLAG_l)
+#define LS_SET_FLAG_a(flags) (flags |= LS_FLAG_a)
+#define LS_SET_FLAG_r(flags) (flags |= LS_FLAG_r)
+#define LS_SET_FLAG_R(flags) (flags |= LS_FLAG_R)
+#define LS_SET_FLAG_t(flags) (flags |= LS_FLAG_t)
+#define LS_SET_FLAG_dirs(flags) (flags |= LS_FLAG_dirs)
 
 #define LS_HAS_FLAG_l(flags) (flags & LS_FLAG_l)
 #define LS_HAS_FLAG_a(flags) (flags & LS_FLAG_a)
@@ -125,6 +132,11 @@ char iter_dir(char flags, char *path, DIR *dir, dir_func f) {
 		}
 		if (!file_list)
 			file_list = new_element;
+	}
+
+	if (LS_HAS_FLAG_dirs(flags)) {
+		ft_putstr(path);
+		ft_putstr(":\n");
 	}
 
 	if (LS_HAS_FLAG_l(flags)) {
@@ -315,19 +327,19 @@ char parse_flags(char flags, char *str) {
 	for (int i2 = 1; str[i2]; i2++) {
 		switch (str[i2]) {
 			case 'l':
-				flags |= LS_FLAG_l;
+				LS_SET_FLAG_l(flags);
 				break;
 			case 'a':
-				flags |= LS_FLAG_a;
+				LS_SET_FLAG_a(flags);
 				break;
 			case 'r':
-				flags |= LS_FLAG_r;
+				LS_SET_FLAG_r(flags);
 				break;
 			case 'R':
-				flags |= LS_FLAG_R;
+				LS_SET_FLAG_R(flags);
 				break;
 			case 't':
-				flags |= LS_FLAG_t;
+				LS_SET_FLAG_t(flags);
 				break;
 			default:
 				if (str[i2]) {
@@ -366,6 +378,8 @@ ls_args parse_args(int argc, char **argv) {
 
 	ret.directories = directories;
 	ret.err = 0;
+	if (ret.directories && ret.directories->next)
+		LS_SET_FLAG_dirs(ret.flags);
 	return ret;
 }
 
@@ -392,6 +406,8 @@ int main(int argc, char *argv[]) {
 			delete_list_forward(&args.directories, safe_free);
 			panic();
 		}
+		if (current->next)
+			ft_putchar('\n');
 		ft_putchar('\n');
 	}
 	delete_list_forward(&args.directories, safe_free);
@@ -400,5 +416,4 @@ int main(int argc, char *argv[]) {
 
 // TODO Cleanup
 // TODO Sort output
-// TODO multi directory display
 // TODO Rrt flags
