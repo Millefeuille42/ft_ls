@@ -24,7 +24,7 @@ void attach_element_to_list(ft_list *list, ft_list *element) {
 
 ft_list *new_element_to_list(ft_list *list, void *data) {
 	if (!list)
-		return NULL;
+		return new_list_element(data);
 
 	ft_list *new_element = new_list_element(data);
 	if (!new_element)
