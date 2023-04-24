@@ -513,13 +513,24 @@ int main(int argc, char *argv[]) {
 			panic();
 		}
 	}
+
 	ft_list *current = args.directories;
 	ft_list *next = NULL;
 	size_t i = 0;
 	for (; current; current = next) {
 		next = current->next;
+
 		struct stat file_stat;
 		if (lstat(current->data, &file_stat) < 0) {
+			if (errno == 2) {
+				ft_fputstr("ft_ls: cannot access '", 2);
+				ft_fputstr(current->data, 2);
+				ft_fputstr("': No such file or directory\n", 2);
+				if (current == args.directories)
+					args.directories = args.directories->next;
+				delete_element(current, safe_free);
+				continue;
+			} // No such file or directory
 			delete_list_forward(&args.directories, safe_free);
 			panic();
 		}
@@ -562,4 +573,3 @@ int main(int argc, char *argv[]) {
 }
 
 // TODO Cleanup
-// TODO Unknown dir error management
