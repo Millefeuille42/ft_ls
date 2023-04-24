@@ -72,6 +72,18 @@ char *get_path(char *s) {
 	return ft_string(".");
 }
 
+char file_name_alpha_asc_sort(void *a, void *b) {
+	file_data *a_file = a;
+	file_data *b_file = b;
+	for (size_t i = 0; a_file->path[i]; i++) {
+		char a_char = (char) ft_tolower(a_file->path[i]);
+		char b_char = (char) ft_tolower(b_file->path[i]);
+		if (a_char != b_char)
+			return (char) (a_char < b_char);
+	}
+	return 1;
+}
+
 file_data *get_data_from_file(struct dirent *file_info, char *path) {
 	char *filepath = ft_string_concat((char *[3]){path, "/", file_info->d_name}, 3);
 	if (!filepath)
@@ -145,6 +157,8 @@ char iter_dir(char flags, char *path, DIR *dir, dir_func f) {
 		ft_putnbr((int)blocks);
 		ft_putchar('\n');
 	}
+
+	file_list = list_sort(file_list, file_name_alpha_asc_sort);
 
 	char err = 0;
 	ft_list *current = file_list;
@@ -415,5 +429,4 @@ int main(int argc, char *argv[]) {
 }
 
 // TODO Cleanup
-// TODO Sort output
 // TODO Rrt flags

@@ -13,7 +13,8 @@ void delete_element(ft_list *element, list_data_del_func del) {
 	if (element->next)
 		element->next->prev = element->prev;
 
-	del(&element->data);
+	if (del)
+		del(&element->data);
 	safe_free((void **) &element);
 }
 

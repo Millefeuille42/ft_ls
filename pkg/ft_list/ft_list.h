@@ -15,6 +15,7 @@ typedef struct s_ft_list {
 
 typedef void (*list_func)(ft_list *);
 typedef void (*list_data_del_func)(void **);
+typedef char (*list_sort_func)(void *a, void *b); // a < b
 
 ft_list *new_list_element(void *data);
 void attach_element_to_list(ft_list *list, ft_list *element);
@@ -29,5 +30,7 @@ ft_list *end_of_list(ft_list *list);
 void delete_element(ft_list *element, list_data_del_func del);
 void delete_list_forward(ft_list **list, list_data_del_func del);
 void delete_list_backward(ft_list **list, list_data_del_func del);
+
+ft_list *list_sort(ft_list *list, list_sort_func comparator);
 
 #endif //FT_LS_FT_LIST_H

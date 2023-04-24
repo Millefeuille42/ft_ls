@@ -14,6 +14,7 @@ SOURCES	= 		cmd/main.c \
           		pkg/ft_string/ft_string_copy.c \
           		pkg/ft_string/ft_split.c \
           		pkg/ft_string/get_after_n_sep.c \
+          		pkg/ft_string/ft_to_lower.c \
            \
           		pkg/ft_memory/safe_free.c \
           		pkg/ft_memory/ft_bzero.c \
@@ -28,6 +29,7 @@ SOURCES	= 		cmd/main.c \
           		pkg/ft_list/delete_list.c \
           		pkg/ft_list/list_accessors.c \
           		pkg/ft_list/list_accessors.c \
+          		pkg/ft_list/list_sort.c \
 
 
 HEADERS	=		pkg/ft_print/ft_print.h \

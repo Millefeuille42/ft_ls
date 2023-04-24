@@ -16,4 +16,6 @@ char **ft_split(char *str, char sep);
 char *get_after_n_sep(char *str, char sep, int n);
 char *get_after_last_sep(char *str, char sep);
 
+int	ft_tolower(int c);
+
 #endif //FT_LS_FT_STRING_H
