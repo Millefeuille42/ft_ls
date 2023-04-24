@@ -22,6 +22,19 @@ void attach_element_to_list(ft_list *list, ft_list *element) {
 	element->prev = end;
 }
 
+void remove_element_from_list(ft_list *element) {
+	if (!element)
+		return;
+
+	if (element->prev)
+		element->prev->next = element->next;
+	if (element->next)
+		element->next->prev = element->prev;
+
+	element->prev = NULL;
+	element->next = NULL;
+}
+
 ft_list *new_element_to_list(ft_list *list, void *data) {
 	if (!list)
 		return new_list_element(data);

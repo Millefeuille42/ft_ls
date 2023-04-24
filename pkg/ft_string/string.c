@@ -7,7 +7,8 @@
 char *ft_string(const char *str) {
 	if (!str)
 		return NULL;
-    char *ret = zeroed_malloc(sizeof(char) * (ft_strlen(str) + 1));
-	ft_string_copy(str, ret);
+	size_t len = ft_strlen(str) + 1;
+    char *ret = zeroed_malloc(sizeof(char) * len);
+	ft_string_copy(str, ret, len);
     return ret;
 }

@@ -98,8 +98,7 @@ ft_list *get_dirs_of_dir(char *path, char flags) {
 		if (!dir_list)
 			dir_list = cur_dir;
 
-		ft_list *list_of_dir = get_dirs_of_dir(filepath, flags);
-		end_of_list(dir_list)->next = list_of_dir;
+		end_of_list(dir_list);
 	}
 	closedir(dir);
 	return dir_list;
@@ -222,5 +221,3 @@ int main(int argc, char *argv[]) {
 	delete_list_forward(&args.directories, safe_free);
 	return 0;
 }
-
-// TODO Cleanup

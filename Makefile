@@ -61,7 +61,7 @@ SOURCES_EXTENSION = c
 COMPILE		=	clang
 DELETE		=	rm -f
 
-FLAGS		=	-Wall -Werror -Wextra -pedantic -O3
+FLAGS		=	-Wall -Werror -Wextra -pedantic -Ofast
 
 ######### Additional Paths #########
 
@@ -97,6 +97,7 @@ fclean:	clean clean_bin ## Delete object files and binary
 
 re:	fclean ## Delete object files and binary, then recompile all
 			@make --no-print-directory all
+
 help: ## Print this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 

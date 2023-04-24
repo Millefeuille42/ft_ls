@@ -20,6 +20,7 @@ typedef char (*list_sort_func)(void *a, void *b); // a < b
 ft_list *new_list_element(void *data);
 void attach_element_to_list(ft_list *list, ft_list *element);
 ft_list *new_element_to_list(ft_list *list, void *data);
+void remove_element_from_list(ft_list *element);
 
 void iter_list_forward(ft_list *list, list_func func);
 void iter_list_backward(ft_list *list, list_func func);

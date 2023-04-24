@@ -10,6 +10,7 @@
 # include <pwd.h>
 # include <grp.h>
 # include <time.h>
+# include <string.h>
 
 # include "../pkg/ft_error/ft_error.h"
 # include "../pkg/ft_list/ft_list.h"

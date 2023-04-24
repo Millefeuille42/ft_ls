@@ -7,4 +7,4 @@ ft_ls
 .objs
 
 .idea
-cmake-build-debug
+cmake-build*

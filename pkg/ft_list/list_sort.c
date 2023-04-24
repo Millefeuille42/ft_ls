@@ -22,18 +22,19 @@ ft_list *list_sort(ft_list *list, list_sort_func comparator, char reverse) {
 		return NULL;
 
 	ft_list *new_list = NULL;
+	ft_list *new_list_cursor = NULL;
 	for (ft_list *smallest = get_smallest(list, comparator, reverse); smallest; smallest = get_smallest(list, comparator, reverse)) {
-		ft_list *element = new_element_to_list(new_list, smallest->data);
-		if (!element) {
-			delete_list_forward(&element, NULL);
-			return NULL;
-		}
-		if (!new_list) {
-			new_list = element;
-		}
 		if (smallest == list)
 			list = smallest->next;
-		delete_element(smallest, NULL);
+		remove_element_from_list(smallest);
+		if (!new_list) {
+			new_list = smallest;
+			new_list_cursor = new_list;
+			continue;
+		}
+		new_list_cursor->next = smallest;
+		smallest->prev = new_list_cursor;
+		new_list_cursor = smallest;
 	}
 
 	return new_list;

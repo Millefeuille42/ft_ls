@@ -4,8 +4,7 @@
 
 #include "ft_string.h"
 
-void ft_string_copy(const char *src, char *dest) {
-	for (size_t i = 0; src[i]; i++)
-		dest[i] = src[i];
-	dest[ft_strlen(src)] = '\0';
+void ft_string_copy(const char *src, char *dest, size_t len) {
+	while (len--)
+		*dest++ = *src++;
 }
