@@ -72,7 +72,7 @@ char *get_path(char *s) {
 	return ft_string(".");
 }
 
-char file_name_alpha_asc_sort(void *a, void *b) {
+char file_name_alpha_sort(void *a, void *b) {
 	file_data *a_file = a;
 	file_data *b_file = b;
 	for (size_t i = 0; a_file->path[i]; i++) {
@@ -86,6 +86,13 @@ char file_name_alpha_asc_sort(void *a, void *b) {
 			return (char) (a_char < b_char);
 	}
 	return 1;
+}
+
+char file_ctime_desc_sort(void *a, void *b) {
+	file_data *a_file = a;
+	file_data *b_file = b;
+
+	return (char) (b_file->file_stat.st_ctim.tv_sec < a_file->file_stat.st_ctim.tv_sec);
 }
 
 file_data *get_data_from_file(struct dirent *file_info, char *path) {
@@ -162,8 +169,11 @@ char iter_dir(char flags, char *path, DIR *dir, dir_func f) {
 		ft_putchar('\n');
 	}
 
-	file_list = list_sort(file_list, file_name_alpha_asc_sort, LS_HAS_FLAG_r(flags));
 
+	if (LS_HAS_FLAG_t(flags))
+		file_list = list_sort(file_list, file_ctime_desc_sort, LS_HAS_FLAG_r(flags));
+	else
+		file_list = list_sort(file_list, file_name_alpha_sort, LS_HAS_FLAG_r(flags));
 	char err = 0;
 	ft_list *current = file_list;
 	for (; current && !err; current = current->next)
@@ -307,7 +317,7 @@ char print_file_details(file_data *file) {
 			print_file_link
 	};
 
-	for (int i = LS_PRINT_TYPE; i < LS_PRINT_LINK; i++)
+	for (int i = LS_PRINT_TYPE; i <= LS_PRINT_LINK; i++)
 		print[i](file);
 
 	ft_putchar('\n');
@@ -433,5 +443,5 @@ int main(int argc, char *argv[]) {
 }
 
 // TODO Cleanup
-// TODO Rt flags
+// TODO R flags
 // TODO Unknown dir error management
