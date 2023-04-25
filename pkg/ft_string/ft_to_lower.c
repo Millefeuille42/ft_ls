@@ -3,7 +3,6 @@
 //
 
 int	ft_tolower(int c) {
-	if (c >= 'A' && c <= 'Z')
-		return ('a' + (c - 'A'));
-	return (c);
+    int condition = c >= 'A' && c <= 'Z';
+	return condition * (c | 0x20) + !condition * c;
 }
