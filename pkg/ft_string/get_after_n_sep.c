@@ -31,5 +31,5 @@ char *get_after_n_sep(char *str, char sep, int n) {
 
 	if (!str[i])
 		return str;
-	return str + i + 1;
+	return str + i;
 }

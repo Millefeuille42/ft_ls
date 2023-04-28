@@ -62,18 +62,30 @@ static char print_file_owner_group(file_data *file) {
 }
 
 static char print_file_last_edit(file_data *file) {
+	time_t current_time;
+	time(&current_time);
 	char *t_str = ctime(&file->file_stat.st_ctim.tv_sec);
 	if (!t_str)
 		return -1;
 	char **t_arr = ft_split(t_str, ' ');
 	if (!t_arr)
 		return -1;
+	char *current_year = get_after_n_sep(ctime(&current_time), ' ', 4) ;
+	if (!current_year)
+		return -1;
 
-	for (size_t i = 0; t_arr[i]; i++) {
-		if (!i || i == 4)
+	for (size_t i = 1; t_arr[i] && i < 4; i++) {
+		if (i == 3) {
+			if (!ft_strcmp(current_year, t_arr[4])) {
+				t_arr[i][5] = '\0';
+				ft_putstr(t_arr[i]);
+			}
+			else {
+				t_arr[4][ft_strlen(t_arr[4]) - 1] = '\0';
+				ft_putstr(t_arr[4]);
+			}
 			continue;
-		if (i == 3)
-			t_arr[i][5] = '\0';
+		}
 		ft_putstr(t_arr[i]);
 		ft_putchar(' ');
 	}

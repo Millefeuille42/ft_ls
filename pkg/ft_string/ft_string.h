@@ -17,5 +17,6 @@ char *get_after_n_sep(char *str, char sep, int n);
 char *get_after_last_sep(char *str, char sep);
 
 int	ft_tolower(int c);
+int	ft_strcmp(const char *s1, const char *s2);
 
 #endif //FT_LS_FT_STRING_H

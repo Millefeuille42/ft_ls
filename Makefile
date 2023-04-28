@@ -7,6 +7,7 @@ SOURCES	= 		cmd/main.c \
           		pkg/ft_print/ft_putnbr.c \
            \
           		pkg/ft_string/ft_strlen.c \
+          		pkg/ft_string/ft_strcmp.c \
           		pkg/ft_string/string.c \
           		pkg/ft_string/ft_string_concat.c \
           		pkg/ft_string/ft_string_copy.c \
