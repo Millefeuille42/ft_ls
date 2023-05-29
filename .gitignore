@@ -8,3 +8,6 @@ ft_ls
 
 .idea
 cmake-build*
+
+test_results
+dict.txt
