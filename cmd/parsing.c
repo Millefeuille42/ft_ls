@@ -4,29 +4,62 @@
 
 #include "ft_ls.h"
 
-static char parse_flags(char flags, char *str) {
-	for (int i2 = 1; str[i2]; i2++) {
-		switch (str[i2]) {
+static short parse_flags(short flags, char *str) {
+	for (int i = 1; str[i]; i++) {
+		switch (str[i]) {
 			case 'l':
-				LS_SET_FLAG_l(flags);
+				LS_SET_FLAG(flags, LS_FLAG_l);
 				break;
 			case 'a':
-				LS_SET_FLAG_a(flags);
+				LS_SET_FLAG(flags, LS_FLAG_a);
+				LS_CLEAR_FLAG(flags, LS_FLAG_A);
 				break;
 			case 'r':
-				LS_SET_FLAG_r(flags);
-				break;
-			case 'R':
-				LS_SET_FLAG_R(flags);
-				LS_SET_FLAG_dirs(flags);
+				LS_SET_FLAG(flags, LS_FLAG_r);
 				break;
 			case 't':
-				LS_SET_FLAG_t(flags);
+				LS_SET_FLAG(flags, LS_FLAG_t);
+				LS_CLEAR_FLAG(flags, LS_FLAG_U);
 				break;
+			case 'U':
+				LS_SET_FLAG(flags, LS_FLAG_U);
+				break;
+			case 'G':
+				LS_SET_FLAG(flags, LS_FLAG_G);
+				break;
+			case 'Q':
+				LS_SET_FLAG(flags, LS_FLAG_Q);
+			case 'p':
+				LS_SET_FLAG(flags, LS_FLAG_p);
+			case 'f':
+				LS_SET_FLAG(flags, LS_FLAG_f);
+				LS_SET_FLAG(flags, LS_FLAG_U);
+				LS_SET_FLAG(flags, LS_FLAG_a);
+				LS_CLEAR_FLAG(flags, LS_FLAG_l);
+				LS_CLEAR_FLAG(flags, LS_FLAG_A);
+				break;
+			case 'g':
+				LS_SET_FLAG(flags, LS_FLAG_g);
+				LS_SET_FLAG(flags, LS_FLAG_l);
+				break;
+			case 'R':
+				LS_SET_FLAG(flags, LS_FLAG_R);
+				LS_SET_FLAG(flags, LS_FLAG_dirs);
+				break;
+			case 'A':
+				LS_SET_FLAG(flags, LS_FLAG_a);
+				LS_SET_FLAG(flags, LS_FLAG_A);
+				break;
+			case 'o':
+				LS_SET_FLAG(flags, LS_FLAG_o);
+				LS_SET_FLAG(flags, LS_FLAG_l);
 			default:
-				if (str[i2]) {
+				if (str[i]) {
+					if (!ft_strcmp(str, "--help")) {
+						return -1;
+					}
 					ft_putstr("Invalid flag: ");
-					ft_putchar(str[i2]);
+					ft_putchar(str[i]);
 					ft_putchar('\n');
 					return -1;
 				}
@@ -68,6 +101,6 @@ ls_args parse_args(int argc, char **argv) {
 	ret.directories = directories;
 	ret.err = 0;
 	if (ret.directories && ret.directories->next)
-		LS_SET_FLAG_dirs(ret.flags);
+		LS_SET_FLAG(ret.flags, LS_FLAG_dirs);
 	return ret;
 }

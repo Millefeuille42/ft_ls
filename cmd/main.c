@@ -4,7 +4,19 @@
 
 #include "ft_ls.h"
 
-char iter_dir(char flags, char *path, DIR *dir, dir_func f) {
+int should_exclude_dot(char *filename, short flags) {
+	if (filename[0] != '.')
+		return 0;
+	if (!LS_HAS_FLAG(flags, LS_FLAG_a))
+		return 1;
+
+	int is_dot_dir = !ft_strcmp(".", filename) || !ft_strcmp("..", filename);
+	if (is_dot_dir && LS_HAS_FLAG(flags, LS_FLAG_A))
+		return 1;
+	return 0;
+}
+
+char iter_dir(short flags, char *path, DIR *dir, dir_func f) {
 	if (!path || !dir)
 		return -1;
 
@@ -15,7 +27,7 @@ char iter_dir(char flags, char *path, DIR *dir, dir_func f) {
 		if (!file)
 			return -1;
 		file->file_info = file_info;
-		if (file->file_info->d_name[0] == '.' && !LS_HAS_FLAG_a(flags)) {
+		if (should_exclude_dot(file->file_info->d_name, flags)) {
 			del_file_data((void **) &file);
 			continue;
 		}
@@ -29,22 +41,26 @@ char iter_dir(char flags, char *path, DIR *dir, dir_func f) {
 			file_list = new_element;
 	}
 
-	if (LS_HAS_FLAG_dirs(flags)) {
+	if (LS_HAS_FLAG(flags, LS_FLAG_dirs)) {
 		ft_putstr(path);
 		ft_putstr(":\n");
 	}
 
-	if (LS_HAS_FLAG_l(flags)) {
+	if (LS_HAS_FLAG(flags, LS_FLAG_l)) {
 		size_t blocks = get_total_blocks(file_list);
 		ft_putstr("total ");
 		ft_putnbr((int)blocks);
 		ft_putchar('\n');
 	}
 
-	if (LS_HAS_FLAG_t(flags))
-		file_list = list_sort(file_list, file_ctime_desc_sort, LS_HAS_FLAG_r(flags));
-	else
-		file_list = list_sort(file_list, file_name_alpha_sort, LS_HAS_FLAG_r(flags));
+	if (!LS_HAS_FLAG(flags, LS_FLAG_U)) {
+		if (LS_HAS_FLAG(flags, LS_FLAG_t))
+			file_list = list_sort(file_list, file_ctime_desc_sort);
+		else
+			file_list = list_sort(file_list, file_name_alpha_sort);
+		if (LS_HAS_FLAG(flags, LS_FLAG_r))
+			file_list = list_revert(file_list);
+	}
 	char err = 0;
 	ft_list *current = file_list;
 	for (; current && !err; current = current->next)
@@ -54,7 +70,7 @@ char iter_dir(char flags, char *path, DIR *dir, dir_func f) {
 	return err;
 }
 
-ft_list *get_dirs_of_dir(char *path, char flags) {
+ft_list *get_dirs_of_dir(char *path, short flags) {
 	DIR *dir = opendir(path);
 	if (!dir)
 		return NULL;
@@ -62,7 +78,7 @@ ft_list *get_dirs_of_dir(char *path, char flags) {
 	struct dirent *file_info = readdir(dir);
 	ft_list *dir_list = NULL;
 	for (; file_info; file_info = readdir(dir)) {
-		if (file_info->d_name[0] == '.' && !LS_HAS_FLAG_a(flags))
+		if (should_exclude_dot(file_info->d_name, flags))
 			continue;
 		if (is_cur_dir_or_prev_dir(file_info->d_name))
 			continue;
@@ -104,7 +120,7 @@ ft_list *get_dirs_of_dir(char *path, char flags) {
 	return dir_list;
 }
 
-int start_dir_iter(char *path, char flags) {
+int start_dir_iter(char *path, short flags) {
 	DIR *dir = opendir(path);
 	if (!dir) {
 		return -1;
@@ -114,11 +130,11 @@ int start_dir_iter(char *path, char flags) {
 		return -1;
 	}
 
-	if (LS_HAS_FLAG_R(flags)) {
+	if (LS_HAS_FLAG(flags, LS_FLAG_R)) {
 		ft_list *current = get_dirs_of_dir(path, flags);
 		if (current) {
 			ft_putchar('\n');
-			if (!LS_HAS_FLAG_l(flags))
+			if (!LS_HAS_FLAG(flags, LS_FLAG_l))
 				ft_putchar('\n');
 		}
 		for (; current; current = current->next) {
@@ -128,7 +144,7 @@ int start_dir_iter(char *path, char flags) {
 			}
 			if (current->next) {
 				ft_putchar('\n');
-				if (!LS_HAS_FLAG_l(flags))
+				if (!LS_HAS_FLAG(flags, LS_FLAG_l))
 					ft_putchar('\n');
 			}
 		}
@@ -167,7 +183,7 @@ ls_args handle_files(ls_args args) {
 		}
 		file->file_info = NULL;
 
-		if (i > 0 && !LS_HAS_FLAG_l(args.flags))
+		if (i > 0 && !LS_HAS_FLAG(args.flags, LS_FLAG_l))
 			ft_putchar(' ');
 		i++;
 
@@ -178,7 +194,7 @@ ls_args handle_files(ls_args args) {
 	}
 
 	if (i > 0) {
-		if (!LS_HAS_FLAG_l(args.flags))
+		if (!LS_HAS_FLAG(args.flags, LS_FLAG_l))
 			ft_putchar('\n');
 		if (args.directories)
 			ft_putchar('\n');
@@ -215,7 +231,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (current->next)
 			ft_putchar('\n');
-		if (!LS_HAS_FLAG_l(args.flags))
+		if (!LS_HAS_FLAG(args.flags, LS_FLAG_l))
 			ft_putchar('\n');
 	}
 	delete_list_forward(&args.directories, safe_free);

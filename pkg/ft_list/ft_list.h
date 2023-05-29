@@ -32,6 +32,8 @@ void delete_element(ft_list *element, list_data_del_func del);
 void delete_list_forward(ft_list **list, list_data_del_func del);
 void delete_list_backward(ft_list **list, list_data_del_func del);
 
-ft_list *list_sort(ft_list *list, list_sort_func comparator, char reverse);
+ft_list *list_sort(ft_list *list, list_sort_func comparator);
+
+ft_list *list_revert(ft_list *list);
 
 #endif //FT_LS_FT_LIST_H

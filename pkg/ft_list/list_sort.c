@@ -4,26 +4,25 @@
 
 #include "ft_list.h"
 
-static ft_list *get_smallest(ft_list *list, list_sort_func comparator, char reverse) {
+static ft_list *get_smallest(ft_list *list, list_sort_func comparator) {
 	ft_list *current = list;
 	ft_list *smallest = current;
 	for (; current; current = current->next) {
-		if ((!reverse && comparator(smallest->data, current->data))
-			|| (reverse && comparator(current->data, smallest->data)))
+		if (comparator(smallest->data, current->data))
 			continue;
 		smallest = current;
 	}
 
 	return smallest;
 }
-ft_list *list_sort(ft_list *list, list_sort_func comparator, char reverse) {
+ft_list *list_sort(ft_list *list, list_sort_func comparator) {
 
 	if (!list)
 		return NULL;
 
 	ft_list *new_list = NULL;
 	ft_list *new_list_cursor = NULL;
-	for (ft_list *smallest = get_smallest(list, comparator, reverse); smallest; smallest = get_smallest(list, comparator, reverse)) {
+	for (ft_list *smallest = get_smallest(list, comparator); smallest; smallest = get_smallest(list, comparator)) {
 		if (smallest == list)
 			list = smallest->next;
 		remove_element_from_list(smallest);
@@ -38,4 +37,20 @@ ft_list *list_sort(ft_list *list, list_sort_func comparator, char reverse) {
 	}
 
 	return new_list;
+}
+
+ft_list *list_revert(ft_list *list)
+{
+	ft_list *current = list;
+	ft_list *prev = NULL, *next = NULL;
+
+	while (current != NULL) {
+		next = current->next;
+		current->prev = next;
+		current->next = prev;
+
+		prev = current;
+		current = next;
+	}
+	return prev;
 }

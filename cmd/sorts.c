@@ -24,5 +24,9 @@ char file_ctime_desc_sort(void *a, void *b) {
 	file_data *a_file = a;
 	file_data *b_file = b;
 
+	if (b_file->file_stat.st_ctim.tv_sec == a_file->file_stat.st_ctim.tv_sec) {
+		return (char) (b_file->file_stat.st_ctim.tv_nsec < a_file->file_stat.st_ctim.tv_nsec);
+	}
+
 	return (char) (b_file->file_stat.st_ctim.tv_sec < a_file->file_stat.st_ctim.tv_sec);
 }
