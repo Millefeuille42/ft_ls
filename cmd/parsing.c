@@ -56,9 +56,8 @@ static short parse_flags(short flags, char *str) {
 				break;
 			default:
 				if (str[i]) {
-					if (!ft_strcmp(str, "--help")) {
-						return -1;
-					}
+					print_help();
+					ft_putchar('\n');
 					ft_putstr("Invalid flag: ");
 					ft_putchar(str[i]);
 					ft_putchar('\n');

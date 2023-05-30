@@ -79,4 +79,6 @@ void del_file_data(void **ptr);
 int has_trailing_slash(char *path);
 int is_cur_dir_or_prev_dir(char *dir_name);
 
+void print_help(void);
+
 #endif //FT_LS_FT_LS_H

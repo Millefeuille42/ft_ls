@@ -209,5 +209,4 @@ void print_help(void) {
 	ft_putstr("-g\t\tlike -l, but do not list owner\n");
 	ft_putstr("-A\t\tdo not list implied . and ..\n");
 	ft_putstr("-o\t\tlike -l, but do not list group information\n");
-	ft_putstr("--help\tdisplay this help and exit\n");
 }
