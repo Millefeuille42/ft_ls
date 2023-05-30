@@ -13,7 +13,7 @@ char *ft_string_concat(char **str_list, size_t n) {
 	for (size_t i = 0; i < n; i++)
 		size += ft_strlen(str_list[i]);
 
-	char *ret = zeroed_malloc(sizeof(char) * size);
+	char *ret = zeroed_malloc(sizeof(char) * size + 1);
 
 	for (size_t i = 0; i < n; i++) {
 		size_t offset = ft_strlen(ret);

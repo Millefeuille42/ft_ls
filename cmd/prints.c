@@ -83,7 +83,8 @@ static char print_file_last_edit(file_data *file, short flags) {
 
 	for (size_t i = 1; t_arr[i] && i < 4; i++) {
 		if (i == 3) {
-			if (!ft_strcmp(current_year, t_arr[4])) {
+			if (file->file_stat.st_mtim.tv_sec >= current_time - 15768000 &&
+				file->file_stat.st_mtim.tv_sec <= current_time) {
 				t_arr[i][5] = '\0';
 				ft_putstr(t_arr[i]);
 			}

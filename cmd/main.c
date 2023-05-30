@@ -101,8 +101,11 @@ ft_list *get_dirs_of_dir(char *path, short flags) {
 			return NULL;
 		}
 
-		if (!S_ISDIR(file_stat.st_mode))
+
+		if (!S_ISDIR(file_stat.st_mode)) {
+			safe_free((void **)&filepath);
 			continue;
+		}
 
 		ft_list *cur_dir = new_element_to_list(dir_list, filepath);
 		if (!cur_dir) {

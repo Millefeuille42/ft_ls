@@ -1,14 +1,28 @@
 #!/bin/bash
 
 # TODO Do flags o
-# crunch 1 3 "laRrtGUfgAo" | grep -v '\(.\).*\1' >| dict.txt
+
+MIN_CRUNCH_NUM=$1
+MAX_CRUNCH_NUM=$2
+CRUNCH_CHARSET=$3
+
+[[ -z "$MIN_CRUNCH_NUM" ]] && MIN_CRUNCH_NUM=1
+[[ -z "$MAX_CRUNCH" ]] && MAX_CRUNCH=4
+[[ -z "$CRUNCH_CHARSET" ]] && CRUNCH_CHARSET="laRrtGUfgAo"
 
 RESULT_FOLDER="./test_results"
 LS_RESULT_FILE="$RESULT_FOLDER/ls_result.log"
 FT_LS_RESULT_FILE="$RESULT_FOLDER/ft_ls_result.log"
+DICT_FOLDER="$RESULT_FOLDER/dict.txt"
+
+make
+
+echo "Generating with" "$MIN_CRUNCH_NUM" "$MAX_CRUNCH_NUM" "$CRUNCH_CHARSET"
 
 rm -rf "$RESULT_FOLDER"
 mkdir -p "$RESULT_FOLDER"
+
+crunch "$MIN_CRUNCH_NUM" "$MAX_CRUNCH_NUM" "$CRUNCH_CHARSET" | grep -v '\(.\).*\1' >| "$DICT_FOLDER"
 
 while IFS="" read -r p || [ -n "$p" ]
 do
@@ -34,6 +48,6 @@ do
 
   rm "$LS_RESULT_FILE" "$FT_LS_RESULT_FILE"
 
-done < "$1"
+done < "$DICT_FOLDER"
 
 
