@@ -57,7 +57,7 @@ static char print_file_owner_user(file_data *file, short flags) {
 }
 
 static char print_file_owner_group(file_data *file, short flags) {
-	if (LS_HAS_FLAG(flags, LS_FLAG_G))
+	if (LS_HAS_FLAG(flags, LS_FLAG_G) || LS_HAS_FLAG(flags, LS_FLAG_o))
 		return 0;
 	struct group *p_gid = getgrgid(file->file_stat.st_gid);
 	if (!p_gid)
@@ -71,7 +71,7 @@ static char print_file_last_edit(file_data *file, short flags) {
 	(void)flags;
 	time_t current_time;
 	time(&current_time);
-	char *t_str = ctime(&file->file_stat.st_ctim.tv_sec);
+	char *t_str = ctime(&file->file_stat.st_mtim.tv_sec);
 	if (!t_str)
 		return -1;
 	char **t_arr = ft_split(t_str, ' ');
@@ -195,21 +195,19 @@ void print_no_such_file(char *name) {
 }
 
 void print_help(void) {
-	/* OK */ ft_putstr("Usage: ft_ls [OPTION]... [FILE]...\n");
-	/* OK */ ft_putstr("List information about the FILEs (the current directory by default).\n");
-	/* OK */ ft_putstr("Sort entries alphabetically if none of -ftU is specified.\n\n");
-	/* OK */ ft_putstr("-l\t\tuse a long listing format\n");
-	/* OK */ ft_putstr("-a\t\tdo not ignore entries starting with .\n");
-	/* OK */ ft_putstr("-r\t\treverse order while sorting\n");
-	/* OK */ ft_putstr("-R\t\tlist subdirectories recursively\n");
-	/* OK */ ft_putstr("-t\t\tsort by time, newest first; see --time\n");
-	/* OK */ ft_putstr("-G\t\tin a long listing, don't print group names\n");
-	/* OK */ ft_putstr("-U\t\tdo not sort; list entries in directory order\n");
-	/* OK */ ft_putstr("-f\t\tdo not sort, enable -aU, disable -ls --color\n");
-	/* OK */ ft_putstr("-g\t\tlike -l, but do not list owner\n");
-	/* OK */ ft_putstr("-A\t\tdo not list implied . and ..\n");
-	ft_putstr("-Q\t\tenclose entry names in double quotes\n");
+	ft_putstr("Usage: ft_ls [OPTION]... [FILE]...\n");
+	ft_putstr("List information about the FILEs (the current directory by default).\n");
+	ft_putstr("Sort entries alphabetically if none of -ftU is specified.\n\n");
+	ft_putstr("-l\t\tuse a long listing format\n");
+	ft_putstr("-a\t\tdo not ignore entries starting with .\n");
+	ft_putstr("-r\t\treverse order while sorting\n");
+	ft_putstr("-R\t\tlist subdirectories recursively\n");
+	ft_putstr("-t\t\tsort by time, newest first; see --time\n");
+	ft_putstr("-G\t\tin a long listing, don't print group names\n");
+	ft_putstr("-U\t\tdo not sort; list entries in directory order\n");
+	ft_putstr("-f\t\tdo not sort, enable -aU, disable -ls --color\n");
+	ft_putstr("-g\t\tlike -l, but do not list owner\n");
+	ft_putstr("-A\t\tdo not list implied . and ..\n");
 	ft_putstr("-o\t\tlike -l, but do not list group information\n");
-	ft_putstr("-p\t\tappend / indicator to directories\n");
-	/* OK */ ft_putstr("--help\tdisplay this help and exit");
+	ft_putstr("--help\tdisplay this help and exit\n");
 }
