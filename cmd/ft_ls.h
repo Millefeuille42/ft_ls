@@ -72,6 +72,8 @@ void print_no_such_file(char *name);
 
 char file_name_alpha_sort(void *a, void *b);
 char file_ctime_desc_sort(void *a, void *b);
+char file_ctime_desc_sort_path(void *a, void *b);
+char string_alpha_sort(void *a, void *b);
 
 void del_file_data(void **ptr);
 int has_trailing_slash(char *path);

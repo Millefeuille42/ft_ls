@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# TODO Problematic flags R
-# TODO Do flags oQp
-# crunch 1 3 "laRrtGUfgAoQp" | grep -v '\(.\).*\1' >| dict.tx
+# TODO Do flags o
+# crunch 1 3 "laRrtGUfgAo" | grep -v '\(.\).*\1' >| dict.txt
 
 RESULT_FOLDER="./test_results"
 LS_RESULT_FILE="$RESULT_FOLDER/ls_result.log"

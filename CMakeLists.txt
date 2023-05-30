@@ -44,7 +44,7 @@ set(SOURCE_FT_LS
 		pkg/ft_list/list_accessors.c
 		pkg/ft_list/list_sort.c
 		pkg/ft_list/ft_list.h
-		pkg/ft_string/ft_strcmp.c)
+		pkg/ft_string/ft_strcmp.c pkg/ft_string/ft_is_alpha.c pkg/ft_string/ft_is_alnum.c)
 
 add_executable(ft_ls ${SOURCE_FT_LS})
 target_link_libraries(ft_ls LINK_PUBLIC)

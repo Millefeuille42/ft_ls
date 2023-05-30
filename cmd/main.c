@@ -131,14 +131,24 @@ int start_dir_iter(char *path, short flags) {
 	}
 
 	if (LS_HAS_FLAG(flags, LS_FLAG_R)) {
-		ft_list *current = get_dirs_of_dir(path, flags);
-		if (current) {
+		ft_list *dirs = get_dirs_of_dir(path, flags);
+		if (dirs) {
 			ft_putchar('\n');
 			if (!LS_HAS_FLAG(flags, LS_FLAG_l))
 				ft_putchar('\n');
 		}
+		if (!LS_HAS_FLAG(flags, LS_FLAG_U)) {
+			if (LS_HAS_FLAG(flags, LS_FLAG_t))
+				dirs = list_sort(dirs, file_ctime_desc_sort_path);
+			else
+				dirs = list_sort(dirs, string_alpha_sort);
+			if (LS_HAS_FLAG(flags, LS_FLAG_r))
+				dirs = list_revert(dirs);
+		}
+		ft_list *current = dirs;
 		for (; current; current = current->next) {
 			if (start_dir_iter(current->data, flags)) {
+				delete_list_forward(&dirs, safe_free);
 				closedir(dir);
 				return -1;
 			}
@@ -148,6 +158,7 @@ int start_dir_iter(char *path, short flags) {
 					ft_putchar('\n');
 			}
 		}
+		delete_list_forward(&dirs, safe_free);
 	}
 	closedir(dir);
 	return 0;

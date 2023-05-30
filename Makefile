@@ -14,6 +14,8 @@ SOURCES	= 		cmd/main.c \
           		pkg/ft_string/ft_split.c \
           		pkg/ft_string/get_after_n_sep.c \
           		pkg/ft_string/ft_to_lower.c \
+          		pkg/ft_string/ft_is_alpha.c \
+          		pkg/ft_string/ft_is_alnum.c \
            \
           		pkg/ft_memory/safe_free.c \
           		pkg/ft_memory/ft_bzero.c \

@@ -53,6 +53,7 @@ static short parse_flags(short flags, char *str) {
 			case 'o':
 				LS_SET_FLAG(flags, LS_FLAG_o);
 				LS_SET_FLAG(flags, LS_FLAG_l);
+				break;
 			default:
 				if (str[i]) {
 					if (!ft_strcmp(str, "--help")) {
