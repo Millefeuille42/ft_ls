@@ -126,7 +126,12 @@ ft_list *get_dirs_of_dir(char *path, short flags) {
 int start_dir_iter(char *path, short flags) {
 	DIR *dir = opendir(path);
 	if (!dir) {
-		return -1;
+		ft_fputstr("ft_ls: cannot open directory '", 2);
+		ft_fputstr(path, 2);
+		ft_fputstr("': ", 2);
+		ft_fputstr(strerror(errno), 2);
+		ft_putchar('\n');
+		return -2;
 	}
 	if (iter_dir(flags, path, dir, print_file_props)) {
 		closedir(dir);
@@ -190,7 +195,7 @@ ls_args handle_files(ls_args args) {
 		if (S_ISDIR(file_stat.st_mode))
 			continue;
 
-		file_data *file = get_data_from_file(current->data, "./");
+		file_data *file = get_data_from_file(current->data, "");
 		if (!file) {
 			delete_list_forward(&args.directories, safe_free);
 			panic();
@@ -240,6 +245,8 @@ int main(int argc, char *argv[]) {
 	ft_list *current = args.directories;
 	for (; current; current = current->next) {
 		if (start_dir_iter(current->data, args.flags)) {
+			if (errno == EACCES)
+				continue;
 			delete_list_forward(&args.directories, safe_free);
 			panic();
 		}

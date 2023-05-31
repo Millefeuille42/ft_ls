@@ -8,8 +8,10 @@ file_data *get_data_from_file(char *name, char *path) {
 	char *filepath = NULL;
 	if (has_trailing_slash(path))
 		filepath = ft_string_concat((char *[2]){path, name}, 2);
-	else
+	else if (ft_strlen(path) > 0)
 		filepath = ft_string_concat((char *[3]){path, "/", name}, 3);
+	else
+		filepath = name;
 	if (!filepath)
 		return NULL;
 	struct stat file_stat;

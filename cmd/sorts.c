@@ -29,7 +29,9 @@ char string_alpha_sort(void *a, void *b) {
 		a_i++;
 		b_i++;
 	}
-	return 1;
+	if (!a_string[a_i])
+		return 1;
+	return 0;
 }
 
 char file_name_alpha_sort(void *a, void *b) {
@@ -54,7 +56,9 @@ char file_name_alpha_sort(void *a, void *b) {
 		a_i++;
 		b_i++;
 	}
-	return 1;
+	if (!a_file->path[a_i])
+		return 1;
+	return 0;
 }
 
 char file_ctime_desc_sort_path(void *a, void *b) {

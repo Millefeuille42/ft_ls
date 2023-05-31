@@ -15,6 +15,9 @@ char *get_after_last_sep(char *str, char sep) {
 			last_sep = i;
 	}
 
+	if (last_sep == 0)
+		return str;
+
 	return str + last_sep + 1;
 }
 
