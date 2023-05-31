@@ -24,8 +24,11 @@ char iter_dir(short flags, char *path, DIR *dir, dir_func f) {
 	ft_list *file_list = NULL;
 	for (; file_info; file_info = readdir(dir)) {
 		file_data *file = get_data_from_file(file_info->d_name, path);
-		if (!file)
+		if (!file) {
+			if (errno == EACCES)
+				continue;
 			return -1;
+		}
 		file->file_info = file_info;
 		if (should_exclude_dot(file->file_info->d_name, flags)) {
 			del_file_data((void **) &file);
@@ -239,6 +242,15 @@ int main(int argc, char *argv[]) {
 			safe_free((void **) &dir);
 			panic();
 		}
+	}
+
+	if (!LS_HAS_FLAG(args.flags, LS_FLAG_U)) {
+		if (LS_HAS_FLAG(args.flags, LS_FLAG_t))
+			args.directories = list_sort(args.directories, file_ctime_desc_sort_path);
+		else
+			args.directories = list_sort(args.directories, string_alpha_sort);
+		if (LS_HAS_FLAG(args.flags, LS_FLAG_r))
+			args.directories = list_revert(args.directories);
 	}
 
 	args = handle_files(args);
