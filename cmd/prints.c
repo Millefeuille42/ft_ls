@@ -120,6 +120,7 @@ static char print_file_link(file_data *file, short flags) {
 		}
 		ft_putstr(" -> ");
 		ft_putstr(buf);
+		safe_free((void **)&buf);
 	}
 	return 0;
 }
